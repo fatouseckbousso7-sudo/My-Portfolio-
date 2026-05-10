@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Portfolio — Référente Digitale</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&family=Space+Mono&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
+
+<style>
+/* ============================================
+   VARIABLES & RESET
+   ============================================ */
+:root {
+  --bg:       #232930;
+  --bg2:      #272c35;
+  --card:     #2f3540;
+  --card2:    #2d353e;
+  --border:   rgba(234, 207, 207, 0.465);
+  --gold:     #deae4d;
+  --gold2:    #80642b;
+  --gold-dim: rgba(233, 185, 90, 0.739);
+  --teal:     #4a9b8e;
+  --teal-dim: rgba(74, 155, 142, 0.263);
+  --ivory:    #f0ebe0;
+  --ivory2:   #c8c0b0;
+  --muted:    #5a5d60;
+  --text:     #b8b4aa;
+
+  --ff-disp:  'Playfair Display', Georgia, serif;
+  --ff-body:  'Outfit', sans-serif;
+  --ff-mono:  'Space Mono', monospace;
+
+  --ease:     cubic-bezier(.4,0,.2,1);
+  --t:        0.32s;
+  --r:        14px;
+  --r2:       28px;
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:78px}
+body{background:var(--bg);color:var(--text);font-family:var(--ff-body);line-height:1.7;overflow-x:hidden}
+a{text-decoration:none;color:inherit}
+ul{list-style:none}
+img{max-width:100%;display:block}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:99px}
+::selection{background:var(--gold);color:var(--bg)}
+
+/* ============================================
+   LAYOUT HELPERS
+   ============================================ */
+.wrap{max-width:1180px;margin:0 auto;padding:0 2rem}
+.sec{padding:7rem 0}
+.sec-dark{background:var(--bg2)}
+.sec-lbl{font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}
+.sec-ttl{font-family:var(--ff-disp);font-size:clamp(1.9rem,3.5vw,3rem);font-weight:400;color:var(--ivory);line-height:1.2}
+.sec-ttl em{font-style:italic;color:var(--gold)}
+.sec-head{text-align:center;margin-bottom:4rem}
+.accent{color:var(--gold)}
+
+/* Reveal */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .65s var(--ease),transform .65s var(--ease)}
+.rv.in{opacity:1;transform:none}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.82rem 2rem;border-radius:99px;font-family:var(--ff-body);font-size:.88rem;font-weight:500;cursor:pointer;border:none;transition:all var(--t) var(--ease);letter-spacing:.02em}
+.btn-g{background:var(--gold);color:var(--bg)}
+.btn-g:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 8px 28px rgba(212,168,83,.3)}
+.btn-o{background:transparent;color:var(--ivory);border:1px solid rgba(240,235,224,.2)}
+.btn-o:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-2px)}
+.btn-full{width:100%;justify-content:center}
+
+/* ============================================
+   NAVBAR
+   ============================================ */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:999;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.3rem 2.5rem;
+  transition:background .4s,box-shadow .4s,padding .4s;
+}
+nav.sc{
+  background:rgba(8,9,10,.88);
+  backdrop-filter:blur(18px);
+  box-shadow:0 1px 0 rgba(212,168,83,.1);
+  padding:.9rem 2.5rem;
+}
+.nav-logo{font-family:var(--ff-disp);font-size:1.55rem;font-weight:700;color:var(--ivory)}
+.nav-logo span{color:var(--gold)}
+.nav-menu{display:flex;align-items:center;gap:2.4rem}
+.nav-menu a{font-size:.83rem;color:var(--text);letter-spacing:.04em;transition:color var(--t);position:relative}
+.nav-menu a::after{content:'';position:absolute;bottom:-3px;left:0;width:0;height:1px;background:var(--gold);transition:width var(--t)}
+.nav-menu a:hover,.nav-menu a:hover::after{color:var(--gold);width:100%}
+.nav-cta{background:var(--gold)!important;color:var(--bg)!important;padding:.52rem 1.3rem!important;border-radius:99px;font-weight:500}
+.nav-cta:hover{background:var(--gold2)!important}
+.nav-cta::after{display:none!important}
+.hbg{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;z-index:1001}
+.hbg span{display:block;width:23px;height:2px;background:var(--ivory);border-radius:2px;transition:var(--t)}
+.hbg.on span:nth-child(1){transform:rotate(45deg) translate(5px,5px)}
+.hbg.on span:nth-child(2){opacity:0}
+.hbg.on span:nth-child(3){transform:rotate(-45deg) translate(5px,-5px)}
+
+/* ============================================
+   HERO
+   ============================================ */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;position:relative;overflow:hidden;padding:9rem 2rem 5rem;
+}
+.hero-bg{position:absolute;inset:0;z-index:0}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);opacity:.14}
+.orb1{width:700px;height:700px;background:radial-gradient(var(--gold),transparent 65%);top:-150px;right:-150px;animation:drift 14s ease-in-out infinite alternate}
+.orb2{width:450px;height:450px;background:radial-gradient(var(--teal),transparent 65%);bottom:-80px;left:-80px;animation:drift 18s ease-in-out infinite alternate-reverse}
+@keyframes drift{to{transform:translate(50px,40px) scale(1.12)}}
+.grid-bg{
+  position:absolute;inset:0;
+  background-image:linear-gradient(rgba(212,168,83,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(212,168,83,.035) 1px,transparent 1px);
+  background-size:65px 65px;
+}
+.hero-inner{position:relative;z-index:1;max-width:860px}
+.hero-badge-line{
+  display:inline-flex;align-items:center;gap:.6rem;
+  border:1px solid rgba(212,168,83,.25);border-radius:99px;
+  padding:.35rem 1.1rem;font-family:var(--ff-mono);font-size:.65rem;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+  margin-bottom:2rem;
+}
+.badge-dot{width:6px;height:6px;background:var(--teal);border-radius:50%;animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+.hero-h1{font-family:var(--ff-disp);font-size:clamp(3rem,7.5vw,6.2rem);font-weight:400;color:var(--ivory);line-height:1.08;margin-bottom:1.4rem}
+.hero-h1 em{font-style:italic;color:var(--gold);display:block}
+.hero-sub{font-size:1rem;color:var(--muted);max-width:520px;margin:0 auto 2.5rem;line-height:1.9}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.hero-scroll{
+  position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.45rem;
+  font-family:var(--ff-mono);font-size:.6rem;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--muted);
+  animation:bob 2.8s ease-in-out infinite;transition:color var(--t)
+}
+.hero-scroll:hover{color:var(--gold)}
+@keyframes bob{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(7px)}}
+.hero-num{
+  position:absolute;right:4vw;top:50%;transform:translateY(-50%);
+  font-family:var(--ff-disp);font-size:clamp(6rem,12vw,11rem);
+  font-weight:700;color:rgba(212,168,83,.04);line-height:1;
+  pointer-events:none;user-select:none;letter-spacing:-.05em;
+}
+
+/* ============================================
+   ABOUT
+   ============================================ */
+.about-grid{display:grid;grid-template-columns:1fr 1.25fr;gap:5rem;align-items:center}
+.about-photo{
+  aspect-ratio:3/4;background:var(--card);border-radius:var(--r2);
+  border:1px solid var(--border);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:1rem;color:var(--muted);font-size:.82rem;position:relative;overflow:hidden;
+}
+.about-photo::before{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-dim),transparent 60%);
+}
+.about-photo i{font-size:4.5rem;color:rgba(212,168,83,.25)}
+.about-photo img{width:100%;height:100%;object-fit:cover;border-radius:var(--r2)}
+.about-float{
+  position:absolute;background:var(--card2);border:1px solid rgba(212,168,83,.18);
+  border-radius:var(--r);padding:.75rem 1.1rem;text-align:center;
+  font-family:var(--ff-mono);font-size:.72rem;color:var(--gold);line-height:1.5;
+  backdrop-filter:blur(10px)
+}
+.fl1{bottom:1.8rem;left:-1.5rem}
+.fl2{top:1.8rem;right:-1.5rem}
+.about-desc{color:var(--text);font-size:.93rem;line-height:1.85;margin:1.5rem 0 2rem}
+.val-list{margin-bottom:2rem;display:flex;flex-direction:column;gap:.7rem}
+.val-item{display:flex;align-items:center;gap:.9rem;font-size:.88rem;color:var(--text)}
+.val-n{font-family:var(--ff-mono);font-size:.63rem;color:var(--gold);letter-spacing:.08em;min-width:22px}
+
+/* ============================================
+   SERVICES
+   ============================================ */
+.srv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.srv-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r2);
+  padding:2rem;position:relative;overflow:hidden;
+  transition:border-color var(--t),transform var(--t),box-shadow var(--t)
+}
+.srv-card::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(135deg,var(--gold-dim),transparent 55%);
+  opacity:0;transition:opacity var(--t)
+}
+.srv-card:hover{border-color:rgba(212,168,83,.28);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.srv-card:hover::after{opacity:1}
+.srv-ico{
+  width:46px;height:46px;background:var(--gold-dim);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--gold);font-size:1.05rem;margin-bottom:1.2rem;
+  transition:background var(--t);position:relative;z-index:1
+}
+.srv-card:hover .srv-ico{background:rgba(212,168,83,.22)}
+.srv-card h3{font-family:var(--ff-disp);font-size:1.2rem;font-weight:400;color:var(--ivory);margin-bottom:.6rem;position:relative;z-index:1}
+.srv-card p{font-size:.85rem;color:var(--muted);line-height:1.75;position:relative;z-index:1}
+.srv-n{position:absolute;top:1.4rem;right:1.4rem;font-family:var(--ff-mono);font-size:.65rem;color:rgba(212,168,83,.18)}
+
+/* ============================================
+   SKILLS
+   ============================================ */
+.sk-grid{display:grid;grid-template-columns:1fr 1fr;gap:4.5rem;align-items:start}
+.sk-col-lbl{font-family:var(--ff-mono);font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);margin-bottom:1.6rem}
+.sk-item{margin-bottom:1.5rem}
+.sk-row{display:flex;justify-content:space-between;font-size:.83rem;color:var(--text);margin-bottom:.45rem}
+.sk-track{height:4px;background:rgba(255,255,255,.05);border-radius:99px;overflow:hidden}
+.sk-fill{height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--gold));border-radius:99px;transition:width 1.5s var(--ease)}
+.soft-wrap{display:flex;flex-wrap:wrap;gap:.5rem}
+.soft{display:inline-block;padding:.36rem .95rem;border:1px solid rgba(212,168,83,.18);border-radius:99px;font-size:.78rem;color:var(--text);transition:all var(--t)}
+.soft:hover{border-color:var(--gold);color:var(--gold);background:var(--gold-dim)}
+.tools-wrap{margin-top:2.2rem}
+.tool-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:1rem}
+.tool{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r);
+  padding:.7rem;display:flex;flex-direction:column;align-items:center;gap:.35rem;
+  font-size:.68rem;color:var(--muted);transition:all var(--t)
+}
+.tool i{font-size:1.15rem;color:var(--gold)}
+.tool:hover{border-color:rgba(212,168,83,.28);color:var(--text)}
+
+/* ============================================
+   PORTFOLIO
+   ============================================ */
+.pf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem}
+.pf-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r2);
+  overflow:hidden;transition:all var(--t)
+}
+.pf-card:hover{border-color:rgba(212,168,83,.2);transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.45)}
+.pf-img{height:210px;position:relative;display:flex;align-items:flex-end;padding:1.1rem 1.4rem}
+.pf1{background:linear-gradient(135deg,#0e2018,#05100d)}
+.pf2{background:linear-gradient(135deg,#1e0d1a,#0e060c)}
+.pf3{background:linear-gradient(135deg,#0d1422,#060a12)}
+.pf4{background:linear-gradient(135deg,#1e1a08,#0e0d04)}
+.pf-tag{
+  font-family:var(--ff-mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;
+  background:rgba(212,168,83,.14);color:var(--gold);border:1px solid rgba(212,168,83,.22);
+  padding:.3rem .8rem;border-radius:99px
+}
+.pf-body{padding:1.4rem}
+.pf-body h3{font-family:var(--ff-disp);font-size:1.15rem;font-weight:400;color:var(--ivory);margin-bottom:.5rem}
+.pf-body p{font-size:.83rem;color:var(--muted);margin-bottom:1rem;line-height:1.65}
+.pf-link{font-size:.8rem;color:var(--gold);display:inline-flex;align-items:center;gap:.4rem;transition:gap var(--t)}
+.pf-link:hover{gap:.7rem}
+
+/* ============================================
+   TESTIMONIALS
+   ============================================ */
+.ts-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+.ts-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r2);
+  padding:1.9rem;transition:all var(--t)
+}
+.ts-card:hover{border-color:rgba(212,168,83,.2);transform:translateY(-3px)}
+.ts-stars{color:var(--gold);font-size:.85rem;letter-spacing:.1em;margin-bottom:.9rem}
+.ts-txt{font-size:.87rem;color:var(--text);line-height:1.85;font-style:italic;margin-bottom:1.4rem}
+.ts-author{display:flex;align-items:center;gap:.8rem}
+.ts-av{
+  width:38px;height:38px;background:var(--gold-dim);border:1px solid rgba(212,168,83,.28);
+  border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-family:var(--ff-disp);font-size:1rem;color:var(--gold);font-weight:700;flex-shrink:0
+}
+.ts-author strong{display:block;font-size:.85rem;color:var(--ivory)}
+.ts-author small{font-size:.73rem;color:var(--muted)}
+
+/* ============================================
+   SOCIAL BANNER
+   ============================================ */
+.soc-band{
+  background:linear-gradient(135deg,rgba(212,168,83,.07),rgba(74,155,142,.07));
+  border-top:1px solid rgba(212,168,83,.08);border-bottom:1px solid rgba(212,168,83,.08);
+  padding:4rem 0;text-align:center;
+}
+.soc-ttl{font-family:var(--ff-disp);font-size:1.75rem;font-weight:400;color:var(--ivory);margin-bottom:2rem}
+.soc-row{display:flex;justify-content:center;flex-wrap:wrap;gap:.9rem}
+.soc-pill{
+  display:inline-flex;align-items:center;gap:.55rem;
+  padding:.7rem 1.5rem;border:1px solid rgba(255,255,255,.08);
+  border-radius:99px;font-size:.83rem;color:var(--text);
+  background:var(--card);transition:all var(--t)
+}
+.soc-pill:hover{border-color:var(--gold);color:var(--gold);transform:translateY(-3px);box-shadow:0 6px 22px rgba(212,168,83,.18)}
+.soc-pill.wa:hover{border-color:#25d366;color:#25d366;box-shadow:0 6px 22px rgba(37,211,102,.18)}
+
+/* ============================================
+   CONTACT
+   ============================================ */
+.ct-grid{display:grid;grid-template-columns:1fr 1.45fr;gap:5rem;align-items:start}
+.ct-desc{color:var(--muted);font-size:.92rem;line-height:1.85;margin:1.4rem 0 2.4rem}
+.ct-items{display:flex;flex-direction:column;gap:.9rem}
+.ct-item{display:flex;align-items:center;gap:.85rem;font-size:.86rem;color:var(--text)}
+.ct-item i{
+  width:36px;height:36px;background:var(--gold-dim);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;color:var(--gold);font-size:.82rem;flex-shrink:0
+}
+.ct-item a:hover{color:var(--gold)}
+.ct-form{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--r2);
+  padding:2.4rem;display:flex;flex-direction:column;gap:1.2rem
+}
+.fg{display:flex;flex-direction:column;gap:.38rem}
+.fg label{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.fg input,.fg textarea{
+  background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);
+  border-radius:var(--r);padding:.82rem 1rem;
+  color:var(--ivory);font-family:var(--ff-body);font-size:.88rem;
+  outline:none;resize:none;transition:border var(--t)
+}
+.fg input::placeholder,.fg textarea::placeholder{color:var(--muted)}
+.fg input:focus,.fg textarea:focus{border-color:rgba(212,168,83,.38)}
+
+/* ============================================
+   FOOTER
+   ============================================ */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:2.8rem 0}
+.ft-inner{display:flex;flex-direction:column;align-items:center;gap:.8rem;text-align:center}
+.ft-logo{font-family:var(--ff-disp);font-size:1.8rem;font-weight:700;color:var(--ivory)}
+.ft-sub{font-family:var(--ff-mono);font-size:.66rem;letter-spacing:.22em;text-transform:uppercase;color:var(--muted)}
+.ft-soc{display:flex;gap:.9rem;margin:.4rem 0}
+.ft-soc a{
+  width:36px;height:36px;border:1px solid rgba(255,255,255,.08);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;font-size:.82rem;color:var(--muted);transition:all var(--t)
+}
+.ft-soc a:hover{border-color:var(--gold);color:var(--gold)}
+.ft-copy{font-size:.74rem;color:var(--muted)}
+
+/* ============================================
+   BACK TO TOP
+   ============================================ */
+#btt{
+  position:fixed;bottom:1.8rem;right:1.8rem;
+  width:42px;height:42px;background:var(--gold);color:var(--bg);
+  border:none;border-radius:50%;cursor:pointer;font-size:.82rem;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 18px rgba(212,168,83,.38);
+  opacity:0;transform:translateY(14px);transition:all var(--t);z-index:998
+}
+#btt.on{opacity:1;transform:none}
+#btt:hover{background:var(--gold2);transform:translateY(-2px)}
+
+/* ============================================
+   RESPONSIVE
+   ============================================ */
+@media(max-width:1024px){
+  .srv-grid{grid-template-columns:repeat(2,1fr)}
+  .ts-grid{grid-template-columns:repeat(2,1fr)}
+  .about-grid{gap:3rem}
+}
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  nav.sc{padding:.85rem 1.5rem}
+  .nav-menu{
+    position:fixed;top:0;right:-100%;width:72vw;height:100vh;
+    background:rgba(8,9,10,.96);backdrop-filter:blur(20px);
+    flex-direction:column;align-items:flex-start;
+    gap:2rem;padding:6rem 2rem 2rem;
+    transition:right .4s var(--ease);
+    box-shadow:-10px 0 50px rgba(0,0,0,.6)
+  }
+  .nav-menu.on{right:0}
+  .hbg{display:flex}
+  .hero-h1{font-size:clamp(2.4rem,10vw,4rem)}
+  .hero-num{display:none}
+  .about-grid{grid-template-columns:1fr;gap:2.5rem}
+  .about-photo{max-width:320px;margin:0 auto}
+  .fl1,.fl2{display:none}
+  .srv-grid{grid-template-columns:1fr}
+  .sk-grid{grid-template-columns:1fr;gap:2.5rem}
+  .pf-grid{grid-template-columns:1fr}
+  .ts-grid{grid-template-columns:1fr}
+  .ct-grid{grid-template-columns:1fr;gap:2.5rem}
+  .sec{padding:4.5rem 0}
+}
+@media(max-width:480px){
+  .wrap{padding:0 1.2rem}
+  .hero-btns{flex-direction:column;align-items:stretch}
+  .btn{justify-content:center}
+  .tool-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════ NAVBAR ═══════════════ -->
+<nav id="nav">
+  <div class="nav-logo">
+    <!-- ✏️ Remplace S.D par tes initiales -->
+    Fs<span>.</span>B
+  </div>
+  <ul class="nav-menu" id="navMenu">
+    <li><a href="#accueil">Accueil</a></li>
+    <li><a href="#apropos">À propos</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#competences">Compétences</a></li>
+    <li><a href="#portfolio">Portfolio</a></li>
+    <li><a href="#contact" class="nav-cta">Contact</a></li>
+  </ul>
+  <button class="hbg" id="hbg" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ═══════════════ HERO ═══════════════ -->
+<section class="hero" id="accueil">
+  <div class="hero-bg">
+    <div class="orb orb1"></div>
+    <div class="orb orb2"></div>
+    <div class="grid-bg"></div>
+  </div>
+  <div class="hero-num">FsB</div>
+  <div class="hero-inner">
+    <div class="hero-badge-line rv">
+      <span class="badge-dot"></span>
+      Disponible pour nouveaux projets
+    </div>
+    <!-- ✏️ Remplace le titre ci-dessous -->
+    <h1 class="hero-h1 rv">
+      <em>Fatou seck Bousso
+      <em></em>
+    </h1>
+    <!-- ✏️ Remplace le sous-titre -->
+    <p class="hero-sub rv">
+      Référente digitale spécialisée en stratégie web,<br/>
+      communication et création de contenu sur-mesure.Je transforme<br/>vos idées en
+      solutions digitales
+    </p>
+    <div class="hero-btns rv">
+      <a href="#services" class="btn btn-g">Découvrir mes services</a>
+      <a href="#contact"  class="btn btn-o">Me contacter</a>
+    </div>
+  </div>
+  <a href="#apropos" class="hero-scroll rv">
+    <span>Scroll</span>
+    <i class="fa-solid fa-arrow-down"></i>
+  </a>
+</section>
+
+<!-- ═══════════════ À PROPOS ═══════════════ -->
+<section class="sec" id="apropos">
+  <div class="wrap">
+    <div class="about-grid">
+
+      <div class="about-photo rv">
+        <!-- ✏️ Remplace par <img src="ta-photo.jpg" alt="Photo"> -->
+        <img src="ma photo" alt="">
+        <span>Votre photo ici</span>
+        <div class="about-float fl1">2+ ans<br/><small>d'expérience</small></div>
+        <div class="about-float fl2"><br/><small></small></div>
+      </div>
+
+      <div class="rv">
+        <p class="sec-lbl">À propos</p>
+        <h2 class="sec-ttl">Passionnée de<br/><em>transformation digitale</em></h2>
+        <!-- ✏️ Remplace par ta présentation -->
+        <p class="about-desc">
+           J'accompagne entrepreneurs, PME et marques dans leur développement en ligne. Mon approche allie stratégie, créativité et performance pour des résultats concrets et durables. Je crois en un digital humain, accessible et efficace.
+        </p>
+        <div class="val-list">
+          <div class="val-item"><span class="val-n">01</span><span>Stratégie orientée résultats</span></div>
+          <div class="val-item"><span class="val-n">02</span><span>Créativité &amp; innovation</span></div>
+          <div class="val-item"><span class="val-n">03</span><span>Accompagnement humain</span></div>
+        </div>
+        <a href="#contact" class="btn btn-g">Travaillons ensemble</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ SERVICES ═══════════════ -->
+<section class="sec sec-dark" id="services">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="sec-lbl">Ce que je fais</p>
+      <h2 class="sec-ttl">Mes <em>services</em></h2>
+    </div>
+    <div class="srv-grid">
+
+      <div class="srv-card rv">
+        <div class="srv-ico"><i class="fa-solid fa-bullseye"></i></div>
+        <h3>Stratégie Digitale</h3>
+        <p>Audit complet, positionnement et feuille de route digitale personnalisée pour booster votre présence en ligne.</p>
+        <span class="srv-n">01</span>
+      </div>
+
+      <div class="srv-card rv">
+        <div class="srv-ico"><i class="fa-brands fa-instagram"></i></div>
+        <h3>Réseaux Sociaux</h3>
+        <p>Création et animation de vos comptes (Facebook, Instagram, LinkedIn) pour engager et fidéliser votre audience.</p>
+        <span class="srv-n">02</span>
+      </div>
+
+      <div class="srv-card rv">
+        <div class="srv-ico"><i class="fa-solid fa-pen-nib"></i></div>
+        <h3>Création de Contenu</h3>
+        <p>Rédaction web, visuels, vidéos courtes et newsletters qui reflètent votre image et captent l'attention.</p>
+        <span class="srv-n">03</span>
+      </div>
+
+      <div class="srv-card rv">
+        <div class="srv-ico"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+        <h3>SEO &amp; Référencement</h3>
+        <p>Optimisation de votre visibilité sur Google pour attirer un trafic qualifié et durable.</p>
+        <span class="srv-n">04</span>
+      </div>
+
+      <div class="srv-card rv">
+        <div class="srv-ico"><i class="fa-solid fa-chalkboard-user"></i></div>
+        <h3>Formation &amp; Coaching</h3>
+        <p>Sessions individuelles ou collectives pour maîtriser les outils digitaux et développer votre autonomie.</p>
+        <span class="srv-n">05</span>
+      </div>
+
+      <div class="srv-card rv">
+        <div class="srv-ico"><i class="fa-solid fa-globe"></i></div>
+        <h3>Création de Sites Web</h3>
+        <p>Sites vitrines modernes, rapides et optimisés pour convertir vos visiteurs en clients.</p>
+        <span class="srv-n">06</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ COMPÉTENCES ═══════════════ -->
+<section class="sec" id="competences">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="sec-lbl">Mon expertise</p>
+      <h2 class="sec-ttl"><em>Compétences</em></h2>
+    </div>
+    <div class="sk-grid">
+
+      <div class="rv">
+        <p class="sk-col-lbl">Hard Skills</p>
+        <!-- ✏️ Modifie les pourcentages dans data-w="" -->
+        <div class="sk-item">
+          <div class="sk-row"><span>Marketing Digital</span><span>92%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="92"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-row"><span>Réseaux Sociaux</span><span>95%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="95"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-row"><span>SEO / SEA</span><span>80%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="80"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-row"><span>Création Graphique</span><span>88%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="88"></div></div>
+        </div>
+        <div class="sk-item">
+          <div class="sk-row"><span>HTML / CSS</span><span>75%</span></div>
+          <div class="sk-track"><div class="sk-fill" data-w="75"></div></div>
+        </div>
+      </div>
+
+      <div class="rv">
+        <p class="sk-col-lbl">Soft Skills</p>
+        <div class="soft-wrap">
+          <!-- ✏️ Ajoute / supprime des tags -->
+          <span class="soft">Écoute active</span>
+          <span class="soft">Créativité</span>
+          <span class="soft">Rigueur</span>
+          <span class="soft">Adaptabilité</span>
+          <span class="soft">Leadership</span>
+          <span class="soft">Pédagogie</span>
+          <span class="soft">Curiosité</span>
+          <span class="soft">Gestion de projet</span>
+          <span class="soft">Communication</span>
+          <span class="soft">Empathie</span>
+        </div>
+        <div class="tools-wrap">
+          <p class="sk-col-lbl">Outils maîtrisés</p>
+          <div class="tool-grid">
+            <div class="tool"><i class="fa-brands fa-figma"></i><span>Figma</span></div>
+            <div class="tool"><i class="fa-brands fa-canva"></i><span>Canva</span></div>
+            <div class="tool"><i class="fa-brands fa-wordpress"></i><span>WordPress</span></div>
+            <div class="tool"><i class="fa-brands fa-google"></i><span>Google Ads</span></div>
+            <div class="tool"><i class="fa-solid fa-envelope-open-text"></i><span>Mailchimp</span></div>
+            <div class="tool"><i class="fa-solid fa-chart-line"></i><span>Analytics</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ PORTFOLIO ═══════════════ -->
+<section class="sec sec-dark" id="portfolio">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="sec-lbl">Mes réalisations</p>
+      <h2 class="sec-ttl"><em>Portfolio</em></h2>
+    </div>
+    <div class="pf-grid">
+
+      <!-- ✏️ Remplace les infos de chaque projet -->
+      <div class="pf-card rv">
+        <div class="pf-img pf1"><span class="pf-tag">Stratégie</span></div>
+        <div class="pf-body">
+          <h3>Refonte stratégie digitale</h3>
+          <p>Accompagnement complet d'une PME : audit, plan d'action 12 mois, formation équipe marketing.</p>
+          <a href="#" class="pf-link">Voir le projet <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="pf-card rv">
+        <div class="pf-img pf2"><span class="pf-tag">Réseaux Sociaux</span></div>
+        <div class="pf-body">
+          <h3>Gestion Instagram / LinkedIn</h3>
+          <p>Community management mensuel, création de contenu et croissance organique pour une marque mode.</p>
+          <a href="#" class="pf-link">Voir le projet <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="pf-card rv">
+        <div class="pf-img pf3"><span class="pf-tag">Site Web</span></div>
+        <div class="pf-body">
+          <h3>Création site vitrine</h3>
+          <p>Conception et développement d'un site moderne, responsive et SEO-friendly pour un consultant.</p>
+          <a href="#" class="pf-link">Voir le projet <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+      <div class="pf-card rv">
+        <div class="pf-img pf4"><span class="pf-tag">Formation</span></div>
+        <div class="pf-body">
+          <h3>Programme formation digitale</h3>
+          <p>Conception et animation d'un parcours de formation marketing digital pour 20 participants.</p>
+          <a href="#" class="pf-link">Voir le projet <i class="fa-solid fa-arrow-right"></i></a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ TÉMOIGNAGES ═══════════════ -->
+<section class="sec" id="temoignages">
+  <div class="wrap">
+    <div class="sec-head rv">
+      <p class="sec-lbl">Ce qu'ils disent</p>
+      <h2 class="sec-ttl"><em>Témoignages</em></h2>
+    </div>
+    <div class="ts-grid">
+
+      <!-- ✏️ Remplace par de vrais témoignages -->
+      <div class="ts-card rv">
+        <div class="ts-stars">★★★★★</div>
+        <p class="ts-txt">« Une professionnelle remarquable ! Elle a transformé notre présence digitale en quelques mois. Résultats concrets et au-delà de nos espérances. »</p>
+        <div class="ts-author">
+          <div class="ts-av">A</div>
+          <div><strong>Aminata S.</strong><small>CEO, Fashion Brand</small></div>
+        </div>
+      </div>
+
+      <div class="ts-card rv">
+        <div class="ts-stars">★★★★</div>
+        <p class="ts-txt">« Formation très enrichissante, pédagogie claire et adaptée. J'ai appris en quelques heures ce que je n'arrivais pas à comprendre depuis des mois. »</p>
+        <div class="ts-author">
+          <div class="ts-av">K</div>
+          <div><strong>Karim D.</strong><small>Entrepreneur</small></div>
+        </div>
+      </div>
+
+      <div class="ts-card rv">
+        <div class="ts-stars">★★★★</div>
+        <p class="ts-txt">« Stratégie digitale claire, créative et efficace. Notre communauté a triplé en 3 mois. Je recommande vivement son accompagnement. »</p>
+        <div class="ts-author">
+          <div class="ts-av">F</div>
+          <div><strong>Fatou M.</strong><small>Directrice Marketing</small></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ RÉSEAUX SOCIAUX ═══════════════ -->
+<div class="soc-band">
+  <div class="wrap">
+    <p class="soc-ttl rv">Retrouvez-moi sur les réseaux</p>
+    <div class="soc-row rv">
+      <!-- ✏️ Remplace les # par tes vrais liens -->
+      <a href="www.linkedin.com/in/fatou-seck-bousso-55543a389" class="soc-pill" target="_blank"><i class="fa-brands fa-linkedin-in"></i> LinkedIn</a>
+      <a href="https://www.instagram.com/niamniamdelicious/" class="soc-pill" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
+      <a href="https://www.facebook.com/profile.php?id=61579712024675&sk=followers&locale=fr_FR" class="soc-pill" target="_blank"><i class="fa-brands fa-facebook-f"></i> Facebook</a>
+      <a href="www.tiktok.com/@niamniam.delicious" class="soc-pill" target="_blank"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+      <!-- ✏️ Remplace TONNUM par ton numéro WhatsApp avec indicatif ex: 221XXXXXXXX -->
+      <a href="https://wa.me/TONNUM" class="soc-pill wa" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════ CONTACT ═══════════════ -->
+<section class="sec" id="contact">
+  <div class="wrap">
+    <div class="ct-grid">
+
+      <div class="rv">
+        <p class="sec-lbl">Parlons-en</p>
+        <h2 class="sec-ttl">Contactez-<em>moi</em></h2>
+        <!-- ✏️ Remplace le texte -->
+        <p class="ct-desc">Un projet, une question, une collaboration ? N'hésitez pas à m'écrire, je réponds sous 24h.</p>
+        <div class="ct-items">
+          <!-- ✏️ Remplace par tes vraies coordonnées -->
+          <div class="ct-item">
+            <i class="fa-solid fa-envelope"></i>
+            <a href="mailto:votre@email.com">fatouseckbousso7@gmail.com</a>
+          </div>
+          <div class="ct-item">
+            <i class="fa-solid fa-phone"></i>
+            <a href="tel:+221XXXXXXXX">+221 782158416</a>
+          </div>
+          <div class="ct-item">
+            <i class="fa-solid fa-location-dot"></i>
+            <span>Dakar, Sénégal</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="ct-form rv">
+        <div class="fg">
+          <label>Nom complet</label>
+          <input type="text" placeholder="Votre nom"/>
+        </div>
+        <div class="fg">
+          <label>Email</label>
+          <input type="email" placeholder="votre@email.com"/>
+        </div>
+        <div class="fg">
+          <label>Sujet</label>
+          <input type="text" placeholder="Objet de votre demande"/>
+        </div>
+        <div class="fg">
+          <label>Message</label>
+          <textarea rows="5" placeholder="Décrivez votre projet..."></textarea>
+        </div>
+        <button class="btn btn-g btn-full" onclick="sendForm(this)">
+          Envoyer <i class="fa-solid fa-paper-plane"></i>
+        </button>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════ FOOTER ═══════════════ -->
+<footer>
+  <div class="wrap">
+    <div class="ft-inner">
+      <!-- ✏️ Remplace S.D par tes initiales -->
+      <div class="ft-logo">Fs<span class="accent">.</span>B</div>
+      <p class="ft-sub">Référente Digitale · Stratège Web</p>
+      <div class="ft-soc">
+        <a href="#" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+        <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+        <a href="#" target="_blank"><i class="fa-brands fa-facebook-f"></i></a>
+        <a href="#" target="_blank"><i class="fa-brands fa-whatsapp"></i></a>
+      </div>
+      <p class="ft-copy">© 2026 · Tous droits réservés · Conçu avec ♥</p>
+    </div>
+  </div>
+</footer>
+
+<!-- Bouton retour en haut -->
+<button id="btt" aria-label="Retour en haut" onclick="window.scrollTo({top:0,behavior:'smooth'})">
+  <i class="fa-solid fa-chevron-up"></i>
+</button>
+
+<!-- ═══════════════ JAVASCRIPT ═══════════════ -->
+<script>
+/* ── Navbar scroll ── */
+const nav = document.getElementById('nav');
+const btt = document.getElementById('btt');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('sc',  window.scrollY > 40);
+  btt.classList.toggle('on',  window.scrollY > 400);
+});
+
+/* ── Hamburger ── */
+const hbg     = document.getElementById('hbg');
+const navMenu = document.getElementById('navMenu');
+hbg.addEventListener('click', () => {
+  hbg.classList.toggle('on');
+  navMenu.classList.toggle('on');
+});
+navMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+  hbg.classList.remove('on');
+  navMenu.classList.remove('on');
+}));
+
+/* ── Reveal on scroll ── */
+const rvEls = document.querySelectorAll('.rv');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    const sibs = [...e.target.parentElement.querySelectorAll('.rv')];
+    e.target.style.transitionDelay = (sibs.indexOf(e.target) * 90) + 'ms';
+    e.target.classList.add('in');
+    io.unobserve(e.target);
+  });
+}, { threshold: 0.1 });
+rvEls.forEach(el => io.observe(el));
+
+/* ── Skill bars ── */
+const skFills = document.querySelectorAll('.sk-fill');
+const skIo = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (!e.isIntersecting) return;
+    setTimeout(() => { e.target.style.width = e.target.dataset.w + '%'; }, 250);
+    skIo.unobserve(e.target);
+  });
+}, { threshold: 0.4 });
+skFills.forEach(el => skIo.observe(el));
+
+/* ── Active nav link ── */
+const secs = document.querySelectorAll('section[id]');
+window.addEventListener('scroll', () => {
+  const y = window.scrollY + 100;
+  secs.forEach(s => {
+    const a = navMenu.querySelector(`a[href="#${s.id}"]`);
+    if (a) a.style.color = (y >= s.offsetTop && y < s.offsetTop + s.offsetHeight) ? 'var(--gold)' : '';
+  });
+});
+
+/* ── 3-D tilt on cards ── */
+document.querySelectorAll('.srv-card,.pf-card,.ts-card').forEach(c => {
+  c.addEventListener('mousemove', e => {
+    const r = c.getBoundingClientRect();
+    const x = (e.clientX - r.left) / r.width  - .5;
+    const y = (e.clientY - r.top)  / r.height - .5;
+    c.style.transform = `translateY(-4px) rotateX(${-y*5}deg) rotateY(${x*5}deg)`;
+  });
+  c.addEventListener('mouseleave', () => c.style.transform = '');
+});
+
+/* ── Contact form ── */
+function sendForm(btn) {
+  const form   = btn.closest('.ct-form');
+  const fields = form.querySelectorAll('input, textarea');
+  let ok = true;
+  fields.forEach(f => {
+    f.style.borderColor = f.value.trim() ? '' : 'rgba(220,70,70,.5)';
+    if (!f.value.trim()) ok = false;
+  });
+  if (!ok) return;
+  const orig = btn.innerHTML;
+  btn.innerHTML = '<i class="fa-solid fa-check"></i> Message envoyé !';
+  btn.style.background = '#3ea06a';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.innerHTML = orig;
+    btn.style.background = '';
+    btn.disabled = false;
+    fields.forEach(f => f.value = '');
+  }, 3200);
+}
+</script>
+</body>
+</html>
